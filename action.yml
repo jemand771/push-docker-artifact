@@ -13,7 +13,20 @@ runs:
         echo Title: ${{ toJson(github.event.workflow_run.display_title) }}
       shell: bash
     - name: Update podman
-      run: sudo apt update && sudo apt install -y podman
+      # via https://podman.io/docs/installation
+      # language=bash
+      run: |
+        sudo mkdir -p /etc/apt/keyrings
+        # Debian Testing/Bookworm
+        curl -fsSL https://download.opensuse.org/repositories/devel:kubic:libcontainers:unstable/Debian_Testing/Release.key \
+        | gpg --dearmor \
+        | sudo tee /etc/apt/keyrings/devel_kubic_libcontainers_unstable.gpg > /dev/null
+        echo \
+        "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/devel_kubic_libcontainers_unstable.gpg]\
+        https://download.opensuse.org/repositories/devel:kubic:libcontainers:unstable/Debian_Testing/ /" \
+        | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:unstable.list > /dev/null
+        sudo apt update
+        sudo apt install -y podman
       shell: bash
     - name: Login to GitHub Container Registry
       uses: docker/login-action@v2
@@ -25,6 +38,7 @@ runs:
     - name: Download images
       uses: actions/github-script@v6.4.1
       with:
+        # language=javascript
         script: |
           var artifacts = await github.rest.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
