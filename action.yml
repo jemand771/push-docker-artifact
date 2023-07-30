@@ -42,10 +42,10 @@ runs:
     - run: unzip docker-images.zip
       shell: bash
     - name: import images
-      run: for file in *.tar; do echo "loading $file"; docker load < $file; done
+      run: for file in *.tar; do echo "loading $file"; podman load < $file; done
       shell: bash
-    - run: docker image ls
+    - run: podman image ls
       shell: bash
     - name: push all images
-      run: for image in $(cat docker-images.txt); do echo pushing $image; docker push $image; done
+      run: for image in $(cat docker-images.txt); do echo pushing $image; podman push $image; done
       shell: bash
