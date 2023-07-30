@@ -41,7 +41,7 @@ runs:
     - run: unzip docker-images.zip
       shell: bash
     - name: import images
-      run: for file in *.tar; do docker load < $file; done
+      run: for file in *.tar; do echo "loading $file"; docker load < $file; done
       shell: bash
     - run: docker image ls
       shell: bash
