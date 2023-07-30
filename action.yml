@@ -44,7 +44,7 @@ runs:
     - name: import images
       run: for file in *.tar; do echo "loading $file"; podman load < $file; done
       shell: bash
-    - run: podman image ls
+    - run: podman image ls && podman --version
       shell: bash
     - name: push all images
       run: for image in $(cat docker-images.txt); do echo pushing $image; podman push $image; done
