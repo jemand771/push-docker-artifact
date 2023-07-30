@@ -2,8 +2,8 @@ name: artifact-push
 description: Push docker image workflow artifacts to ghcr
 inputs:
   GITHUB_TOKEN:
-    description: Token for turnstyle and accessing ghcr. Set to github.token
-    required: true
+    description: Token for accessing ghcr. Set to github.token. Omit to disable docker login.
+    required: false
   use-turnstyle:
     description: Prevent parallel builds
     required: false
@@ -11,13 +11,9 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Turnstyle
-      uses: softprops/turnstyle@v1
-      if: ${{ fromJSON(inputs.use-turnstyle) }}
-      env:
-        GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
     - name: Login to GitHub Container Registry
       uses: docker/login-action@v1
+      if: ${{ inputs.GITHUB_TOKEN != '' }}
       with:
         registry: ghcr.io
         username: ${{ github.repository_owner }}
