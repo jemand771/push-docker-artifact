@@ -40,7 +40,7 @@ runs:
     - name: prepare upload script
       #language=bash
       run: |
-        echo 'for image in $(cat /docker-images.txt); do; skopeo copy -a oci-archive:/image.tar:$(echo $image | cut -d: -f2) docker://$image; done' > entrypoint.sh
+        echo 'for image in $(cat /docker-images.txt); do skopeo copy -a oci-archive:/image.tar:$(echo $image | cut -d: -f2) docker://$image; done' > entrypoint.sh
         chmod +x entrypoint.sh
       shell: bash
     - name: push all images
