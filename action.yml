@@ -37,8 +37,12 @@ runs:
           fs.writeFileSync('${{github.workspace}}/docker-images.zip', Buffer.from(download.data));
     - run: unzip docker-images.zip
       shell: bash
-    - name: push all images
-      uses: docker://quay.io/skopeo/stable:latest
+    - name: prepare upload script
       #language=bash
-      with:
-        args: 'for image in $(cat docker-images.txt); do; skopeo copy -a oci-archive:image.tar:$(echo $image | cut -d: -f2) docker://$image; done'
+      run: |
+        echo 'for image in $(cat docker-images.txt); do; skopeo copy -a oci-archive:/image.tar:$(echo $image | cut -d: -f2) docker://$image; done' > entrypoint.sh
+        chmod +x entrypoint.sh
+      shell: bash
+    - name: push all images
+      run: docker run --rm -it -v image.tar:/image.tar -v entrypoint.sh:/entrypoint.sh --entrypoint /entrypoint.sh quay.io/skopeo/stable:latest
+      shell: bash
