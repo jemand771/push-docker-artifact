@@ -40,9 +40,16 @@ runs:
     - name: prepare upload script
       #language=bash
       run: |
-        echo "for image in $(cat docker-images.txt); do; skopeo copy -a oci-archive:/image.tar:$(echo $image | cut -d: -f2) docker://$image; done" > entrypoint.sh
+        echo 'for image in $(cat /docker-images.txt); do; skopeo copy -a oci-archive:/image.tar:$(echo $image | cut -d: -f2) docker://$image; done' > entrypoint.sh
         chmod +x entrypoint.sh
       shell: bash
     - name: push all images
-      run: docker run --rm -v "$(pwd)/image.tar:/image.tar:ro" -v "$(pwd)/entrypoint.sh:/entrypoint.sh:ro" --entrypoint /bin/bash quay.io/skopeo/stable:v1.14.0 /entrypoint.sh
+      run: > 
+        docker run --rm
+        -v "$(pwd)/image.tar:/image.tar:ro"
+        -v "$(pwd)/docker-images.txt:/docker-images.txt:ro"
+        -v "$(pwd)/entrypoint.sh:/entrypoint.sh:ro"
+        --entrypoint /bin/bash
+        quay.io/skopeo/stable:v1.14.0
+        /entrypoint.sh
       shell: bash
