@@ -44,5 +44,5 @@ runs:
         chmod +x entrypoint.sh
       shell: bash
     - name: push all images
-      run: docker run --rm -v "$(pwd)/image.tar:/image.tar:ro" -v "$(pwd)/entrypoint.sh:/entrypoint.sh:ro" --entrypoint /entrypoint.sh quay.io/skopeo/stable:latest
+      run: docker run --rm -v "$(pwd)/image.tar:/image.tar:ro" -v "$(pwd)/entrypoint.sh:/entrypoint.sh:ro" --entrypoint /entrypoint.sh quay.io/skopeo/stable:v1.14.0
       shell: bash
