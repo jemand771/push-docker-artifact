@@ -41,7 +41,7 @@ runs:
       uses: docker://quay.io/skopeo/stable:latest
       #language=bash
       with:
-        args: |
-          for image in $(cat docker-images.txt); do
-            skopeo copy -a oci-archive:image.tar:$(echo $image | cut -d: -f2) docker://$image
+        args: >
+          for image in $(cat docker-images.txt); do;
+            skopeo copy -a oci-archive:image.tar:$(echo $image | cut -d: -f2) docker://$image;
           done
