@@ -43,7 +43,7 @@ runs:
           var artifacts = await github.rest.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              run_id: ${{github.event.workflow_run.id }},
+              run_id: ${{ github.event_name == 'workflow_run' ? github.event.workflow_run.id : github.run_id }},
           });
           var matchArtifact = artifacts.data.artifacts.filter((artifact) => {
             return artifact.name == "docker-images"
