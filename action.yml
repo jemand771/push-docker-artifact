@@ -42,6 +42,6 @@ runs:
       #language=bash
       with:
         args: >
-          for image in $(cat docker-images.txt); do;
+          "for image in $(cat docker-images.txt); do;
             skopeo copy -a oci-archive:image.tar:$(echo $image | cut -d: -f2) docker://$image;
-          done
+          done"
