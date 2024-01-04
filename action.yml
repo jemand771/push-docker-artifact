@@ -39,7 +39,7 @@ runs:
       run: |
         set -e
         for image in $(cat docker-images.txt); do
-          echo "skopeo copy oci-archive:/image.tar:$(echo $image | cut -d: -f2) docker://$image" >> entrypoint.sh
+          echo "skopeo copy -a oci-archive:/image.tar:$(echo $image | cut -d: -f2) docker://$image" >> entrypoint.sh
         done
         chmod +x entrypoint.sh
       shell: bash
